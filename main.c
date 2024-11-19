@@ -8,12 +8,9 @@
 #include "merge_sort.h"
 #include "radix_sort.h"
 #include "heap_sort.h"
-#include "red_black_sort.h"
 #include "gerar_dados.h"
 
-#define MAX_IMAGENS 1000
-
-//Bubble Sort, Tim Sort, Merge Sort, Radix Sort, Heap Sort e Red-Black Tree Sort.
+#define MAX_IMAGENS 100
 
 void ler_dados(Imagem imagens[], int *n);
 void escrever_dados(Imagem imagens[], int n, const char* filename);
@@ -34,6 +31,7 @@ int main() {
     } else if (escolha == 2) {
         n = MAX_IMAGENS;
         gerar_dados_internos(imagens, n);
+        salvar_dados_aleatorios(imagens, n, "dados_aleatorios.txt");
         printf("Quantidade de linhas aleatórias geradas: %d\n", n);
     } else {
         printf("Opção inválida!\n");
@@ -75,12 +73,7 @@ int main() {
     double heapTime = ((double) (end - start)) / CLOCKS_PER_SEC;
     printf("Tempo gasto no Heap Sort: %f segundos\n", heapTime);
 
-    // Medir e gravar o tempo de execução para Red-Black Tree Sort
-    start = clock();
-    redBlackSort(imagens, n);
-    end = clock();
-    double redBlackTime = ((double) (end - start)) / CLOCKS_PER_SEC;
-    printf("Tempo gasto no Red-Black Tree Sort: %f segundos\n", redBlackTime);
+    
 
     // Escrever os dados ordenados para o arquivo de saída apropriado
     if (escolha == 1) {
@@ -88,7 +81,6 @@ int main() {
     } else {
         escrever_dados(imagens, n, "ordenacao_saida_interno.txt");
     }
-
 
     return 0;
 }
@@ -104,8 +96,8 @@ void ler_dados(Imagem imagens[], int *n) {
     while (fscanf(arquivo, "%d,%f,%10s,%10s,%2s,%49[^\n]", 
         &imagens[i].codigo_alerta, 
         &imagens[i].area, 
-        imagens[i].data_inicio, 
-        imagens[i].data_fim, 
+        imagens[i].data_foto_antes, 
+        imagens[i].data_foto_depois, 
         imagens[i].estado, 
         imagens[i].municipio) != EOF) {
         i++;
@@ -121,7 +113,7 @@ void escrever_dados(Imagem imagens[], int n, const char* filename) {
         exit(1);
     }
     for (int i = 0; i < n; i++) {
-        fprintf(arquivo, "%d,%.2f,%s,%s,%s,%s\n", imagens[i].codigo_alerta, imagens[i].area, imagens[i].data_inicio, imagens[i].data_fim, imagens[i].estado, imagens[i].municipio);
+        fprintf(arquivo, "%d,%.2f,%s,%s,%s,%s\n", imagens[i].codigo_alerta, imagens[i].area, imagens[i].data_foto_antes, imagens[i].data_foto_depois, imagens[i].estado, imagens[i].municipio);
     }
     fclose(arquivo);
 }
